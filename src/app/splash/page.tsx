@@ -1,9 +1,9 @@
 "use client";
 
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
 
-export default function SplashPage() {
+function SplashContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") ?? "cafe-owner";
@@ -16,9 +16,9 @@ export default function SplashPage() {
     return () => clearTimeout(timer);
   }, [router, targetHref]);
 
-  function handleContinue() {
+  const handleContinue = () => {
     router.push(targetHref);
-  }
+  };
 
   return (
     <button
@@ -45,5 +45,19 @@ export default function SplashPage() {
         </div>
       </div>
     </button>
+  );
+}
+
+export default function SplashPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-dvh w-full items-center justify-center text-slate-200">
+          Loading…
+        </div>
+      }
+    >
+      <SplashContent />
+    </Suspense>
   );
 }
